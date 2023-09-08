@@ -11,11 +11,13 @@ export interface Profile {
 type AuthStore = {
   token: string
   profile: Profile
+  isAuth: boolean
 }
 
 type Actions = {
   setToken: (token: string) => void
   setProfile: (profile: Profile) => void
+  logout: () => void
 }
 
 const useAuth = create(persist<AuthStore & Actions>(
@@ -24,10 +26,12 @@ const useAuth = create(persist<AuthStore & Actions>(
     profile: {
       username: '',
       email: '',
-      _id: ''
+      _id: '',
     },
-    setToken: (token: string) => set({ token }),
-    setProfile: (profile: Profile) => set({ profile })
+    isAuth: false,
+    setToken: (token: string) => set({ token, isAuth: true }),
+    setProfile: (profile: Profile) => set({ profile }),
+    logout: () => set({ token: '', profile: { username: '', email: '', _id: '' }, isAuth: false }),
   }),
   {
     name: 'auth'

@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email is invalid' }),
@@ -33,6 +34,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { setToken, setProfile } = useAuth();
+  const navigate = useNavigate()
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -44,10 +46,18 @@ const Login = () => {
   const onSubmit = async (values: LoginFormData) => {
     console.log(values);
     try {
-      const { data } = await axiosClient.post('/auth/login', values);
-      console.log(data)
-      setToken(data.token);
-      setProfile(data.profile);
+      const responseLogin = await axiosClient.post('/auth/login', values);
+      console.log(responseLogin.data)
+      setToken(responseLogin.data.token);
+      
+      const responseProfile = await axiosClient.get('/auth/profile');
+      console.log(responseProfile)
+      setProfile(responseProfile.data);
+      toast.success('Success')
+
+      setTimeout(() => {
+        navigate('/home')
+      }, 1000)
     } catch (error) {
       if(error instanceof AxiosError) {
         console.log(error)

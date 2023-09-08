@@ -1,6 +1,7 @@
-import { Link, Outlet } from 'react-router-dom';
-import Container from '../components/ui/container';
-import { Video } from 'lucide-react';
+import { Link, Navigate, Outlet } from 'react-router-dom';
+import Container from './ui/container';
+import { Heart, Menu, Plus, User, Video } from 'lucide-react';
+import { Button, buttonVariants } from './ui/button';
 import {
   Sheet,
   SheetClose,
@@ -9,66 +10,61 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { buttonVariants } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
+} from './ui/sheet';
+import useNewModal from '@/hooks/use-new-modal';
+import useEditModal from '@/hooks/use-edit-modal';
+
+interface PrivateRouteProps {
+  isAllowed: boolean;
+}
 
 const items = [
   {
-    title: 'About',
-    href: '/about',
+    label: 'Profile',
+    href: '/home/profile',
   },
   {
-    title: 'Testimonials',
-    href: '/testimonials',
-  },
-  {
-    title: 'Login',
-    href: '/',
-  },
-  {
-    title: 'Sign up',
-    href: '/register',
+    label: 'Favorites',
+    href: '/home/favorites',
   },
 ];
+// https://www.youtube.com/embed/HOlvoOdIm-k
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
+  const newModal = useNewModal()
+  const editModal = useEditModal()
 
-const AuthLayout = () => {
+  if (!isAllowed) return <Navigate to='/' />;
+
   return (
     <>
       <div className='fixed w-full z-20 bg-white shadow-sm'>
         <div className='py-4 border-[1px] border-gray-200'>
           <Container>
             <nav className='flex justify-between items-center'>
-              <div className='flex items-center gap-x-4'>
+              <Link 
+                to={'/home'}
+                className='flex items-center gap-x-4 cursor-pointer'>
                 <Video className='w-12 h-12 text-indigo-500' />
                 <span className='font-bold text-indigo-500 text-2xl'>WV</span>
-                <div className='flex gap-x-4 items-center max-lg:hidden'>
-                  <Link
-                    to={'/about'}
-                    className='text-muted-foreground hover:text-indigo-500 font-light text-lg'
-                  >
-                    About
-                  </Link>
-                  <Link
-                    to={'/testimonials'}
-                    className='text-muted-foreground hover:text-indigo-500 font-light text-lg'
-                  >
-                    Testimonials
-                  </Link>
-                </div>
-              </div>
+              </Link>
               <div className='flex gap-x-4 items-center max-lg:hidden'>
+                <Button 
+                  onClick={() => newModal.onOpen()}
+                  variant='ghost'>
+                  <Plus className='w-6 h-6 mr-2' />
+                  New
+                </Button>
                 <Link
-                  to={'/'}
+                  to={'/home/favorites'}
                   className={buttonVariants({ variant: 'ghost' })}
                 >
-                  Login
+                  <Heart className='w-6 h-6' />
                 </Link>
                 <Link
-                  to={'/register'}
-                  className={buttonVariants({ variant: 'default' })}
+                  to={'/home/profile'}
+                  className={buttonVariants({ variant: 'ghost' })}
                 >
-                  Sign up
+                  <User />
                 </Link>
               </div>
               <div className='max-lg:flex hidden'>
@@ -90,15 +86,23 @@ const AuthLayout = () => {
                         <SheetClose asChild key={item.href}>
                           <Link
                             to={item.href}
-                            className='text-muted-foreground hover:text-indigo-500 font-light text-lg rounded-full hover:bg-neutral-100 p-2'
+                            className={buttonVariants({ variant: 'ghost', className: 'text-start' })}
                           >
-                            {item.title}
+                            {item.label}
                           </Link>
                         </SheetClose>
                       ))}
+                      <Button 
+                        onClick={() => newModal.onOpen()}
+                        className='w-full' variant={'ghost'}>
+                        New
+                        <Plus className='w-6 h-6 ml-auto' />
+                      </Button>
                     </div>
                     <SheetFooter>
-                      <p className='text-slate-700 font-medium pt-8'>WV, All rights reserved, 2023</p>
+                      <p className='text-slate-700 font-medium pt-8 mr-auto'>
+                        WV, All rights reserved, 2023
+                      </p>
                     </SheetFooter>
                   </SheetContent>
                 </Sheet>
@@ -108,10 +112,14 @@ const AuthLayout = () => {
         </div>
       </div>
       <main className='pt-32'>
-        <Outlet />
+        <Container>
+          <div className='px-4 sm:px-6 lg:px-8'>
+            <Outlet />
+          </div>
+        </Container>
       </main>
     </>
   );
 };
 
-export default AuthLayout;
+export default PrivateRoute;
