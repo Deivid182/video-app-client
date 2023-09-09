@@ -29,7 +29,7 @@ const App = () => {
           </Route>
           <Route path='/home' element={<PrivateRoute isAllowed={isAuth} />}>
             <Route index element={<Home />} />
-            <Route path='profile' element={<Profile />} />
+            <Route path='profile/:userId' element={<Profile />} />
             <Route path='video-details' element={<VideoDetails />} />
           </Route>
         </Routes>

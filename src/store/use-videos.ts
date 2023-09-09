@@ -7,6 +7,7 @@ export interface Video {
   isPublished: boolean
   userId: string
   url: string
+  likes?: string[]
 }
 
 export interface VideoWithId extends Video {

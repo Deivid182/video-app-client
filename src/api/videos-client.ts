@@ -6,7 +6,7 @@ export const getVideos = async () => {
   return res.data;
 }
 
-export const getVideosByUserId = async (userId: string) => {
+export const getVideosByUserId = async (userId?: string) => {
   const res = await axiosClient.get<VideoWithId[]>(`/videos/profile/${userId}`);
   return res.data
 }
@@ -29,4 +29,9 @@ export const getVideo = async (id: string) => {
 export const updateVideo = async (video: VideoWithId) => {
   const { data } = await axiosClient.put(`/videos/${video._id}`, video);
   return data;
+}
+
+export const toggleLike = async (videoId: string) => {
+  const res = await axiosClient.put(`/videos/like/${videoId}`);
+  return res.data
 }

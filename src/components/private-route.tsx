@@ -13,32 +13,35 @@ import {
 } from './ui/sheet';
 import useNewModal from '@/hooks/use-new-modal';
 import useEditModal from '@/hooks/use-edit-modal';
+import useAuth from '@/store/use-auth';
 
 interface PrivateRouteProps {
   isAllowed: boolean;
 }
 
-const items = [
-  {
-    label: 'Profile',
-    href: '/home/profile',
-  },
-  {
-    label: 'Favorites',
-    href: '/home/favorites',
-  },
-];
 // https://www.youtube.com/embed/HOlvoOdIm-k
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
+  const user = useAuth((state) => state.profile)
   const newModal = useNewModal()
   const editModal = useEditModal()
 
   if (!isAllowed) return <Navigate to='/' />;
 
+  const items = [
+    {
+      label: 'Profile',
+      href: `/home/profile/${user._id}`,
+    },
+    {
+      label: 'Favorites',
+      href: '/home/favorites',
+    },
+  ];
+
   return (
     <>
       <div className='fixed w-full z-20 bg-white shadow-sm'>
-        <div className='py-4 border-[1px] border-gray-200'>
+        <div className='py-4 border-b-[1px] border-gray-200'>
           <Container>
             <nav className='flex justify-between items-center'>
               <Link 
@@ -61,7 +64,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
                   <Heart className='w-6 h-6' />
                 </Link>
                 <Link
-                  to={'/home/profile'}
+                  to={`/home/profile/${user._id}`}
                   className={buttonVariants({ variant: 'ghost' })}
                 >
                   <User />
@@ -111,9 +114,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
           </Container>
         </div>
       </div>
-      <main className='pt-32'>
+      <main className='pt-28'>
         <Container>
-          <div className='px-4 sm:px-6 lg:px-8'>
+          <div className='px-4 sm:px-6 lg:px-8 max-sm:pb-4'>
             <Outlet />
           </div>
         </Container>
