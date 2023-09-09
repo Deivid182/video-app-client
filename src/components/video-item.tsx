@@ -5,14 +5,12 @@ import { useMemo, useCallback } from 'react';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { getVideoId } from '@/lib/get-video-id';
 import useAuth from '@/store/use-auth';
-import { Pencil, ThumbsUp, UserPlus, UserMinus, Trash } from 'lucide-react';
+import { Pencil, ThumbsUp, Trash } from 'lucide-react';
 import useEditModal from '@/hooks/use-edit-modal';
-import { toast } from 'react-hot-toast';
-import useFollow from '@/hooks/use-follow';
 import { useLike } from '@/hooks/use-like';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage } from './ui/avatar';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface VideoItemProps {
   video: VideoWithId;
@@ -24,9 +22,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
   const user = useAuth((state) => state.profile);
   const editModal = useEditModal();
   const navigate = useNavigate()
-  const location = useLocation()
 
-  const { followMutation, dataFollow, isLoadingFollow, isFollowing  } = useFollow()
   const { likeMutation } = useLike()
   const isLiked = useMemo(() => {
     const list = video.likes
@@ -43,17 +39,12 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
   const handleToggleLike = (videoId: string) => {
     likeMutation(videoId);
   };
-  
-  const handleToggleFollow = (userId: string) => {
-    followMutation(userId)
-    toast.success('Success')
-  }
 
   const handleClick = useCallback(() => {
     if(!onClick || !setId) return
     onClick()
     setId(video._id)
-    }, [onClick, setId, video._id])
+  }, [onClick, setId, video._id])
 
   return (
     <Card key={video._id} className='rounded-lg'>
@@ -111,16 +102,11 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
             </div>
           ) : (
             <div className='flex items-center gap-x-2'>
-              <Button variant={'secondary'}>See details</Button>
-              {location.pathname === '/home' && (
-                <Button
-                  onClick={() => handleToggleFollow(video.userId)}
-                  variant={'ghost'}
-                  className='flex items-center justify-center'
-                  size={'icon'}>
-                  {isFollowing ? <UserMinus /> : <UserPlus />}
-                </Button>
-              )}
+              <Button 
+                onClick={() => navigate(`/home/video-details/${video._id}`)}
+                variant={'secondary'}>
+                See details
+              </Button>
               <Button 
                 variant={'ghost'}
                 onClick={() => handleToggleLike(video._id)}

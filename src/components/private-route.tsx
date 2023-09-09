@@ -12,7 +12,6 @@ import {
   SheetTrigger,
 } from './ui/sheet';
 import useNewModal from '@/hooks/use-new-modal';
-import useEditModal from '@/hooks/use-edit-modal';
 import useAuth from '@/store/use-auth';
 
 interface PrivateRouteProps {
@@ -23,7 +22,6 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
   const user = useAuth((state) => state.profile)
   const newModal = useNewModal()
-  const editModal = useEditModal()
 
   if (!isAllowed) return <Navigate to='/' />;
 

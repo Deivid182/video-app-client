@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import useAuth, { Profile } from '@/store/use-auth';
+import useAuth from '@/store/use-auth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import VideoItem from '@/components/video-item';
 import { useQuery } from '@tanstack/react-query';
@@ -24,18 +24,18 @@ const Profile = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [filterVideos, setFilterVideos] = useState(Tab.All);
-  const { followMutation, isFollowing } = useFollow()
+  const { followMutation } = useFollow()
 
-  const {
-    data: videos,
-    isLoading,
-    error,
-  } = useQuery<VideoWithId[]>(['videos'], () => getVideosByUserId(params.userId));
+  const { data: videos, isLoading, error} = useQuery<VideoWithId[]>({
+    queryKey: ['videos', params.userId],
+    queryFn: () => getVideosByUserId(params.userId!),
+  })
 
-  const { data: user, isLoading: isLoadingUser, error: errorUser } = useQuery<Profile>({
+  const { data: user, isLoading: isLoadingUser, error: errorUser } = useQuery({
     queryKey: ['user', params.userId],
     queryFn: () => getUserById(params.userId!),
   }); 
+
 
   const isOwner = useMemo(() => {
     return profile._id === user?._id;
@@ -50,9 +50,15 @@ const Profile = () => {
     }
   }, [filterVideos, videos]);
 
+  const isFollowing = useMemo(() => {
+    if(!user) return
+    const list = user.followers
+    return list?.includes(profile._id)
+  }, [profile._id, user])
+
   const handleToggleFollow = () => {
-    if(params.userId == undefined) return
-    followMutation(params.userId)
+    if(user?._id == undefined) return
+    followMutation(user?._id)
     toast.success('Success')
   }
   const handleLogout = () => {

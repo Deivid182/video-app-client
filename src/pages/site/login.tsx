@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +33,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { setToken, setProfile } = useAuth();
+  const { setToken, setProfile, isAuth } = useAuth();
   const navigate = useNavigate()
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -42,6 +42,10 @@ const Login = () => {
       password: '',
     },
   });
+
+  useEffect(() => {
+    if(isAuth) navigate('/home')
+  }, [isAuth, navigate])
 
   const onSubmit = async (values: LoginFormData) => {
     console.log(values);
