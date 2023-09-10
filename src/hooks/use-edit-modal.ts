@@ -1,4 +1,4 @@
-import { VideoWithId } from '@/store/use-videos'
+import { VideoWithId } from '@/types'
 import { create } from 'zustand'
 
 interface EditModalStore {

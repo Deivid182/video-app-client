@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getVideos } from '@/api/videos-client';
-import { VideoWithId } from '@/store/use-videos';
+import { VideoWithId } from '@/types';
 import VideoItem from '@/components/video-item';
 import Loader from '@/components/ui/loader';
 import Heading from '@/components/ui/heading';
 import DeleteModal from '@/components/delete-modal';
 import { useState } from 'react';
-import { deleteVideo } from '@/api/videos-client';
 import { toast } from 'react-hot-toast';
+import useDelete from '@/hooks/use-delete-video';
 
 const Home = () => {
   const {
@@ -17,30 +17,17 @@ const Home = () => {
   } = useQuery<VideoWithId[]>(['videos'], getVideos);
   const [open, setOpen] = useState(false)
   const [id, setId] = useState('')
-  const queryClient = useQueryClient()
 
-  const { mutate: mutateDeleteVideo, isLoading: isLoadingDelete } = useMutation(deleteVideo, {
-    onMutate: async (id) => {
-      await queryClient.cancelQueries(['videos', id])
+  const { isLoadingDelete, mutateDeleteVideo } = useDelete()
 
-      const previousVideos = queryClient.getQueryData(['videos'])
+  const onOpen = () => setOpen(true)
 
-      queryClient.setQueryData(['videos'], (old?: VideoWithId[]): VideoWithId[] => {
-        if(old == null) return []
-        return old.filter((video: VideoWithId) => video._id !== id)
-      })
-
-      return { previousVideos }
-    },
-    onError: (error, variables, context) => {
-      if(context?.previousVideos != null) {
-        queryClient.setQueryData(['videos'], context.previousVideos)
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(['videos'])
-    }
-  })
+  const onDelete = () => {
+    if(isLoadingDelete) return
+    mutateDeleteVideo(id)
+    setOpen(false)
+    toast.success('Video deleted')
+  }
 
   if (isLoading) {
     return (
@@ -67,14 +54,6 @@ const Home = () => {
     );
   }
 
-  const onOpen = () => setOpen(true)
-
-  const onDelete = () => {
-    if(isLoadingDelete) return
-    mutateDeleteVideo(id)
-    setOpen(false)
-    toast.success('Video deleted')
-  }
 
   return (
     <>

@@ -5,7 +5,7 @@ import VideoItem from '@/components/video-item';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { getVideosByUserId } from '@/api/videos-client';
-import { VideoWithId } from '@/store/use-videos';
+import { VideoWithId } from '@/types';
 import { LogOut } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
@@ -13,6 +13,8 @@ import useFollow from '@/hooks/use-follow';
 import { toast } from 'react-hot-toast';
 import { getUserById } from '@/api/users-client';
 import Loader from '@/components/ui/loader';
+import useDelete from '@/hooks/use-delete-video';
+import DeleteModal from '@/components/delete-modal';
 
 enum Tab {
   Published = 'published',
@@ -25,17 +27,30 @@ const Profile = () => {
   const navigate = useNavigate();
   const [filterVideos, setFilterVideos] = useState(Tab.All);
   const { followMutation } = useFollow()
+  const [id, setId] = useState('')
+  const [open, setOpen] = useState(false)
 
-  const { data: videos, isLoading, error} = useQuery<VideoWithId[]>({
-    queryKey: ['videos', params.userId],
-    queryFn: () => getVideosByUserId(params.userId!),
-  })
-
+  
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useQuery({
     queryKey: ['user', params.userId],
     queryFn: () => getUserById(params.userId!),
-  }); 
+  });
+  
+  const { data: videos, isLoading, error} = useQuery<VideoWithId[]>({
+    queryKey: ['videos', user?._id],
+    queryFn: () => getVideosByUserId(user._id!),
+  })
 
+  const { isLoadingDelete, mutateDeleteVideo } = useDelete()
+
+  const onOpen = () => setOpen(true)
+
+  const onDelete = () => {
+    if(isLoadingDelete) return
+    mutateDeleteVideo(id)
+    setOpen(false)
+    toast.success('Video deleted')
+  }
 
   const isOwner = useMemo(() => {
     return profile._id === user?._id;
@@ -84,6 +99,13 @@ const Profile = () => {
 
   return (
     <>
+      <DeleteModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        isLoading={isLoading}
+        idProp={id}
+      />
       <div className='max-w-lg mx-auto'>
         <div className='flex flex-col space-y-4 items-center w-full'>
           <Avatar className='w-24 h-24'>
@@ -131,7 +153,12 @@ const Profile = () => {
               <TabsContent value={filterVideos}>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   {filteredVideos?.map((video) => (
-                    <VideoItem key={video._id} video={video} />
+                    <VideoItem 
+                      key={video._id} 
+                      video={video} 
+                      onClick={onOpen} 
+                      setId={setId}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -143,7 +170,10 @@ const Profile = () => {
               </h3>
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                 {filteredVideos?.map((video) => (
-                  <VideoItem key={video._id} video={video} />
+                  <VideoItem 
+                    key={video._id} 
+                    video={video} 
+                  />
                 ))}
               </div>
             </div>

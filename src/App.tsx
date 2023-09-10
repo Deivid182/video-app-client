@@ -13,6 +13,7 @@ import VideoDetails from './pages/dash/video-details';
 import NewModal from './components/new-modal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import EditModal from './components/edit-modal';
+import Favorites from './pages/dash/favorites';
 const App = () => {
   const isAuth = useAuth((state) => state.isAuth);
   const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path='profile/:userId' element={<Profile />} />
             <Route path='video-details/:videoId' element={<VideoDetails />} />
+            <Route path='favorites/:userId' element={<Favorites />} />
           </Route>
         </Routes>
       </BrowserRouter>

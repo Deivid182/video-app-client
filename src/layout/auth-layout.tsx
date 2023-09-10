@@ -15,14 +15,6 @@ import { Menu } from 'lucide-react';
 
 const items = [
   {
-    title: 'About',
-    href: '/about',
-  },
-  {
-    title: 'Testimonials',
-    href: '/testimonials',
-  },
-  {
     title: 'Login',
     href: '/',
   },
@@ -40,22 +32,12 @@ const AuthLayout = () => {
           <Container>
             <nav className='flex justify-between items-center'>
               <div className='flex items-center gap-x-4'>
+              <Link 
+                to={'/'}
+                className='flex items-center gap-x-4 cursor-pointer'>
                 <Video className='w-12 h-12 text-indigo-500' />
                 <span className='font-bold text-indigo-500 text-2xl'>WV</span>
-                <div className='flex gap-x-4 items-center max-lg:hidden'>
-                  <Link
-                    to={'/about'}
-                    className='text-muted-foreground hover:text-indigo-500 font-light text-lg'
-                  >
-                    About
-                  </Link>
-                  <Link
-                    to={'/testimonials'}
-                    className='text-muted-foreground hover:text-indigo-500 font-light text-lg'
-                  >
-                    Testimonials
-                  </Link>
-                </div>
+              </Link>
               </div>
               <div className='flex gap-x-4 items-center max-lg:hidden'>
                 <Link

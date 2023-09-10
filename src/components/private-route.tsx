@@ -114,7 +114,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
       </div>
       <main className='pt-28'>
         <Container>
-          <div className='px-4 sm:px-6 lg:px-8 max-sm:pb-4'>
+          <div className='px-4 sm:px-6 lg:px-8 pb-4 sm:pb-8 md:pb-12'>
             <Outlet />
           </div>
         </Container>

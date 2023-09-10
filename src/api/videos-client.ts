@@ -1,5 +1,5 @@
 import { axiosClient } from '@/lib/utils';
-import { Video, VideoWithId } from '@/store/use-videos';
+import { Video, VideoWithId } from '@/types';
 
 export const getVideos = async () => {
   const res = await axiosClient.get<VideoWithId[]>('/videos');

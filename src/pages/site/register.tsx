@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { toast } from 'react-hot-toast';
 import Heading from '@/components/ui/heading';
-import { Separator } from '@/components/ui/separator';
 import {
   Form,
   FormControl,
@@ -18,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { axiosClient } from '@/lib/utils';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 const registerSchema = z.object({
   username: z
@@ -43,7 +43,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -60,8 +60,8 @@ const Register = () => {
       const { data } = await axiosClient.post('/auth/register', values);
       toast.success(data.message);
       setTimeout(() => {
-        navigate('/')
-      }, 500)
+        navigate('/');
+      }, 500);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -74,77 +74,80 @@ const Register = () => {
 
   return (
     <div className='max-w-md mx-auto xl:px-20 md:px-10 sm:px-2 px-4'>
-      <div className='flex flex-col gap-y-6'>
-        <Heading
-          title='Welcome to WebVideos'
-          description='The best place to share your videos.'
-        />
-        <Separator className='text-muted-foreground' />
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full space-y-4'
-          >
-            <FormField
-              control={form.control}
-              name='username'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      {...field}
-                      placeholder='John Doe'
-                      type='text'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      {...field}
-                      placeholder='johndoe@example.com'
-                      type='email'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='password'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      {...field}
-                      placeholder='johndoe@example.com'
-                      type='password'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button disabled={isLoading} type='submit' className='w-full'>
-              Create Account
-            </Button>
-          </form>
-        </Form>
-      </div>
+      <Card className='flex flex-col gap-y-6 p-4'>
+        <CardHeader>
+          <Heading
+            title='Welcome to WebVideos'
+            description='The best place to share your videos.'
+          />
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='w-full space-y-4'
+            >
+              <FormField
+                control={form.control}
+                name='username'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        {...field}
+                        placeholder='John Doe'
+                        type='text'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        {...field}
+                        placeholder='johndoe@example.com'
+                        type='email'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        {...field}
+                        placeholder='johndoe@example.com'
+                        type='password'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button disabled={isLoading} type='submit' className='w-full justify-center'>
+                Create Account
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

@@ -25,8 +25,9 @@ import { Separator } from './ui/separator';
 import useAuth from '@/store/use-auth';
 import { Checkbox } from './ui/checkbox';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Video } from '@/store/use-videos';
+import { Video } from '@/types';
 import { toast } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 
 const videoSchema = z.object({
   title: z.string(),
@@ -46,6 +47,8 @@ const NewModal = () => {
   const newModal = useNewModal();
   const userId = useAuth((state) => state.profile._id);
   const queryClient = useQueryClient()
+  const [submittedData, setSubmittedData] = useState(false)
+
 
   const form = useForm<VideoFormData>({
     resolver: zodResolver(videoSchema),
@@ -87,12 +90,18 @@ const NewModal = () => {
     }
   })
 
+  useEffect(() => {
+    if (form.formState.isSubmitSuccessful) {
+      form.reset()
+    }
+  }, [form])
+
   const onSubmit = (values: VideoFormData) => {
-    console.log(values)
     if(isLoadingMutate) return 
-    mutate(values)
+    mutate({...values, likes: []})
     newModal.onClose()
     toast.success('Video created')
+    form.reset()
   };
 
   return (

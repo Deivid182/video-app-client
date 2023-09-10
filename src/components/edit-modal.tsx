@@ -39,6 +39,7 @@ const videoSchema = z.object({
   userId: z.string(),
   _id: z.string(),
   createdAt: z.string(),
+  likes: z.array(z.string())
 });
 
 type VideoFormData = z.infer<typeof videoSchema>;
@@ -52,12 +53,13 @@ const EditModal = () => {
   const form = useForm<VideoFormData>({
     resolver: zodResolver(videoSchema),
     defaultValues: {
-      isPublished: false,
-      userId,
-      url: '',
       title: '',
       description: '',
-      _id: ''
+      isPublished: false,
+      url: '',
+      _id: '',
+      userId,
+      likes: [],
     }
   })
 
@@ -69,10 +71,12 @@ const EditModal = () => {
       form.setValue('url', editModal.data.url)
       form.setValue('_id', editModal.data._id)
       form.setValue('createdAt', editModal.data.createdAt)
+      form.setValue('userId', editModal.data.userId)
+      form.setValue('likes', editModal.data.likes)
     }
   }, [editModal.data, form])
 
-  const { mutate, isLoading, isError, error } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: updateVideo,
     // When mutate is called:
     onMutate: async (newVideo) => {
@@ -103,6 +107,7 @@ const EditModal = () => {
     }
   })
   const onSubmit = (values: VideoFormData) => {
+    console.log(values)
     mutate(values)
     editModal.onClose()
     toast.success('Video updated successfully')
