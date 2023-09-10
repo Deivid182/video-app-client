@@ -27,7 +27,7 @@ import { Checkbox } from './ui/checkbox';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Video } from '@/types';
 import { toast } from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const videoSchema = z.object({
   title: z.string(),
@@ -47,7 +47,6 @@ const NewModal = () => {
   const newModal = useNewModal();
   const userId = useAuth((state) => state.profile._id);
   const queryClient = useQueryClient()
-  const [submittedData, setSubmittedData] = useState(false)
 
 
   const form = useForm<VideoFormData>({
@@ -77,7 +76,7 @@ const NewModal = () => {
       })
       return { prevVideos }
     },
-    onError: (error, variables, context) => {
+    onError: (error, _variables, context) => {
       console.log(error)
       if(context?.prevVideos != null) {
         queryClient.setQueryData(['videos'], context.prevVideos)
