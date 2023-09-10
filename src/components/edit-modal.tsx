@@ -94,7 +94,7 @@ const EditModal = () => {
       return { previousVideos, newVideo }
     },
     // If the mutation fails, use the context we returned above
-    onError: (err, newVideo, context) => {
+    onError: (_err, _newVideo, context) => {
       if(context?.previousVideos != null) {
         queryClient.setQueryData(['videos'], context.previousVideos)
       }

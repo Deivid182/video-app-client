@@ -17,7 +17,7 @@ const useDelete = () => {
 
       return { previousVideos }
     },
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.previousVideos != null) {
         queryClient.setQueryData(['videos'], context.previousVideos)
       }
