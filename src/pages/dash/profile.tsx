@@ -38,7 +38,8 @@ const Profile = () => {
   
   const { data: videos, isLoading, error} = useQuery<VideoWithId[]>({
     queryKey: ['videos', user?._id],
-    queryFn: () => getVideosByUserId(user._id!),
+    queryFn: () => getVideosByUserId(user._id),
+    enabled: !!user
   })
 
   const { isLoadingDelete, mutateDeleteVideo } = useDelete()
@@ -114,16 +115,16 @@ const Profile = () => {
               className='w-full h-full object-contain'
             />
           </Avatar>
-          <h5 className='text-xl font-medium text-gray-900'>
+          <h5 className='text-xl font-medium text-gray-900 dark:text-white'>
             {user?.username}
           </h5>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
+          <span className='text-sm text-gray-500 dark:text-gray-300'>
             {user?.email}
           </span>
           <div className='flex justify-center items-center gap-x-2 '>
             {isOwner ? (
               <>
-                <Button>Edit Profile</Button>
+                <Button className='dark:text-white'>Edit Profile</Button>
                 <Button variant='outline' onClick={handleLogout}>
                   <LogOut />
                 </Button>

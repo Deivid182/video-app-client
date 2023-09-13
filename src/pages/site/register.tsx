@@ -141,7 +141,7 @@ const Register = () => {
                   </FormItem>
                 )}
               />
-              <Button disabled={isLoading} type='submit' className='w-full justify-center'>
+              <Button disabled={isLoading} type='submit' className='w-full justify-center text-white'>
                 Create Account
               </Button>
             </form>

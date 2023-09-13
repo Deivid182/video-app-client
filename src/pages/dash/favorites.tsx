@@ -1,7 +1,9 @@
 
 const Favorites = () => {
   return (
-    <div>Favorites</div>
+    <div className='flex justify-center font-bold dark:text-white'>
+      <h1>Coming soon...</h1>
+    </div>
   )
 }
 

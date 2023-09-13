@@ -194,7 +194,7 @@ const NewModal = () => {
             />
             <Button 
               disabled={form.formState.isSubmitting || isLoadingMutate}
-              className='w-full justify-center' type='submit'>Submit</Button>
+              className='w-full justify-center dark:text-white' type='submit'>Submit</Button>
           </form>
         </Form>
       </DialogContent>

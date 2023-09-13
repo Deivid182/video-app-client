@@ -48,8 +48,8 @@ const Home = () => {
   if (!videos?.length) {
     return (
       <Heading
-        title='No videos'
-        description='Try to add some with the community'
+        title='Nothing to show'
+        description='Try to share some videos with the community'
       />
     );
   }

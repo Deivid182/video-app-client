@@ -14,32 +14,35 @@ import NewModal from './components/new-modal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import EditModal from './components/edit-modal';
 import Favorites from './pages/dash/favorites';
+import { ThemeProvider } from './context/theme-provider';
 const App = () => {
   const isAuth = useAuth((state) => state.isAuth);
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<AuthLayout />}>
-            <Route index element={<Login />} />
-            <Route path='register' element={<Register />} />
-            <Route path='about' element={<About />} />
-            <Route path='testimonials' element={<Testimonials />} />
-          </Route>
-          <Route path='/home' element={<PrivateRoute isAllowed={isAuth} />}>
-            <Route index element={<Home />} />
-            <Route path='profile/:userId' element={<Profile />} />
-            <Route path='video-details/:videoId' element={<VideoDetails />} />
-            <Route path='favorites/:userId' element={<Favorites />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-      <ToasterProvider />
-      <NewModal />
-      <EditModal />
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<AuthLayout />}>
+              <Route index element={<Login />} />
+              <Route path='register' element={<Register />} />
+              <Route path='about' element={<About />} />
+              <Route path='testimonials' element={<Testimonials />} />
+            </Route>
+            <Route path='/home' element={<PrivateRoute isAllowed={isAuth} />}>
+              <Route index element={<Home />} />
+              <Route path='profile/:userId' element={<Profile />} />
+              <Route path='video-details/:videoId' element={<VideoDetails />} />
+              <Route path='favorites/:userId' element={<Favorites />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+        <ToasterProvider />
+        <NewModal />
+        <EditModal />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 };
 

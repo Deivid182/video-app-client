@@ -2,6 +2,7 @@ import { Link, Navigate, Outlet } from 'react-router-dom';
 import Container from './ui/container';
 import { Heart, Menu, Plus, User, Video } from 'lucide-react';
 import { Button, buttonVariants } from './ui/button';
+import { ModeToggle } from './mode-toggle';
 import {
   Sheet,
   SheetClose,
@@ -18,10 +19,9 @@ interface PrivateRouteProps {
   isAllowed: boolean;
 }
 
-// https://www.youtube.com/embed/HOlvoOdIm-k
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
-  const user = useAuth((state) => state.profile)
-  const newModal = useNewModal()
+  const user = useAuth((state) => state.profile);
+  const newModal = useNewModal();
 
   if (!isAllowed) return <Navigate to='/' />;
 
@@ -38,25 +38,25 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
 
   return (
     <>
-      <div className='fixed w-full z-20 bg-white shadow-sm'>
+      <div className='header z-20 w-full shadow-sm'>
         <div className='py-4 border-b-[1px] border-gray-200'>
           <Container>
             <nav className='flex justify-between items-center'>
-              <Link 
+              <Link
                 to={'/home'}
-                className='flex items-center gap-x-4 cursor-pointer'>
+                className='flex items-center gap-x-4 cursor-pointer'
+              >
                 <Video className='w-12 h-12 text-indigo-500' />
                 <span className='font-bold text-indigo-500 text-2xl'>WV</span>
               </Link>
               <div className='flex gap-x-4 items-center max-lg:hidden'>
-                <Button 
-                  onClick={() => newModal.onOpen()}
-                  variant='ghost'>
+                <ModeToggle />
+                <Button onClick={() => newModal.onOpen()} variant='ghost'>
                   <Plus className='w-6 h-6 mr-2' />
                   New
                 </Button>
                 <Link
-                  to={'/home/favorites'}
+                  to={`/home/favorites/${user._id}`}
                   className={buttonVariants({ variant: 'ghost' })}
                 >
                   <Heart className='w-6 h-6' />
@@ -68,7 +68,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
                   <User />
                 </Link>
               </div>
-              <div className='max-lg:flex hidden'>
+              <div className='max-lg:flex items-center gap-x-6 hidden'>
+                <ModeToggle />
                 <Sheet>
                   <SheetTrigger asChild>
                     <Menu className='w-8 h-8 hover:text-indigo-500 transition-colors cursor-pointer' />
@@ -87,15 +88,20 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
                         <SheetClose asChild key={item.href}>
                           <Link
                             to={item.href}
-                            className={buttonVariants({ variant: 'ghost', className: 'text-start' })}
+                            className={buttonVariants({
+                              variant: 'ghost',
+                              className: 'text-start',
+                            })}
                           >
                             {item.label}
                           </Link>
                         </SheetClose>
                       ))}
-                      <Button 
+                      <Button
                         onClick={() => newModal.onOpen()}
-                        className='w-full' variant={'ghost'}>
+                        className='w-full'
+                        variant={'ghost'}
+                      >
                         New
                         <Plus className='w-6 h-6 ml-auto' />
                       </Button>
@@ -112,7 +118,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAllowed }) => {
           </Container>
         </div>
       </div>
-      <main className='pt-28'>
+      <main className='pt-20'>
         <Container>
           <div className='px-4 sm:px-6 lg:px-8 pb-4 sm:pb-8 md:pb-12'>
             <Outlet />

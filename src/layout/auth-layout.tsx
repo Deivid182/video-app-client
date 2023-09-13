@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/sheet';
 import { buttonVariants } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
+import { ModeToggle } from '@/components/mode-toggle';
 
 const items = [
   {
@@ -27,8 +28,8 @@ const items = [
 const AuthLayout = () => {
   return (
     <>
-      <div className='fixed w-full z-20 bg-white shadow-sm'>
-        <div className='py-4 border-[1px] border-gray-200'>
+      <div className='header shadow-sm'>
+        <div className='py-4 border-b-[1px] border-gray-200'>
           <Container>
             <nav className='flex justify-between items-center'>
               <div className='flex items-center gap-x-4'>
@@ -40,6 +41,7 @@ const AuthLayout = () => {
               </Link>
               </div>
               <div className='flex gap-x-4 items-center max-lg:hidden'>
+                <ModeToggle />
                 <Link
                   to={'/'}
                   className={buttonVariants({ variant: 'ghost' })}
@@ -48,12 +50,13 @@ const AuthLayout = () => {
                 </Link>
                 <Link
                   to={'/register'}
-                  className={buttonVariants({ variant: 'default' })}
+                  className={buttonVariants({ variant: 'default', className: 'text-white' })}
                 >
                   Sign up
                 </Link>
               </div>
-              <div className='max-lg:flex hidden'>
+              <div className='max-lg:flex items-center gap-x-6 hidden'>
+                <ModeToggle />
                 <Sheet>
                   <SheetTrigger asChild>
                     <Menu className='w-8 h-8 hover:text-indigo-500 transition-colors cursor-pointer' />
@@ -89,7 +92,7 @@ const AuthLayout = () => {
           </Container>
         </div>
       </div>
-      <main className='pt-32'>
+      <main className='pt-32 pb-12 sm:pb-8'>
         <Outlet />
       </main>
     </>

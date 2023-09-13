@@ -65,7 +65,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
             >
               <AvatarImage src='/placeholder.jpg' className='w-full h-full' />
             </Avatar>
-            <h3 className='text-xl leading-none font-semibold text-neutral-800  flex flex-col gap-y-2'>
+            <h3 className='text-xl leading-none font-semibold text-neutral-800  flex flex-col gap-y-2 dark:text-white'>
               {video.title}
               <span className='text-sm '>
                 {createdAt}
@@ -90,17 +90,17 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
       </CardContent>
       <CardFooter className='w-full'>
         {user?._id === video.userId ? (
-          <div className='flex items-center gap-x-2 border-t-2 border-b-2 w-full py-1'>
+          <div className='flex items-center gap-x-2 border-t-2 w-full py-1'>
             <Button
-              variant={'ghost'}
+              variant={'destructive'}
               className='flex items-center justify-center'
               size={'icon'}
               onClick={handleClick}
             >
-              <Trash className='text-neutral-600'/>
+              <Trash className='text-white'/>
             </Button>
             <Button
-              variant={'ghost'}
+              variant={'secondary'}
               onClick={() => {
                 editModal.setData(video);
                 editModal.onOpen();
@@ -108,7 +108,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
               className='flex items-center justify-center'
               size={'icon'}
             >
-              <Pencil className='text-neutral-600'/>
+              <Pencil className='dark:text-white'/>
             </Button>
             <Button
               variant={'ghost'}
@@ -116,10 +116,10 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
               className='flex items-center justify-center relative'
               size={'icon'}
             >
-              <ThumbsUp className={cn(isLiked ? 'text-indigo-600' : 'text-neutral-600')} />
+              <ThumbsUp className={cn(isLiked ? 'text-sky-700 dark:text-white' : 'text-neutral-700')} />
               <span
                 className={cn(
-                  isLiked ? 'text-indigo-600' : 'text-neutral-600',
+                  isLiked ? 'text-sky-700 dark:text-white' : 'text-neutral-700',
                   'absolute top-0 right-0'
                 )}
               >
@@ -136,7 +136,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
             )}
           </div>
         ) : (
-          <div className='flex items-center gap-x-2 border-t-2 border-b-2 w-full py-1'>
+          <div className='flex items-center gap-x-2 w-full py-1.5'>
             {location.pathname !== `/home/video-details/${video._id}` && (
               <Button
                 onClick={() => navigate(`/home/video-details/${video._id}`)}
@@ -151,10 +151,10 @@ const VideoItem: React.FC<VideoItemProps> = ({ video, onClick, setId }) => {
               className='flex items-center justify-center relative text-neutral-600'
               size={'icon'}
             >
-              <ThumbsUp className={cn(isLiked ? 'text-sky-600' : '')} />
+              <ThumbsUp className={cn(isLiked ? 'text-sky-700 dark:text-white' : 'text-neutral-700')} />
               <span
                 className={cn(
-                  isLiked ? 'text-sky-600' : '',
+                  isLiked ? 'text-sky-700 dark:text-white' : 'text-neutral-700',
                   'absolute top-0 right-0'
                 )}
               >

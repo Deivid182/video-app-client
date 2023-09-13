@@ -126,7 +126,7 @@ const Login = () => {
               <Button
                 disabled={isLoading}
                 type='submit'
-                className='w-full justify-center'
+                className='w-full justify-center text-white'
               >
                 Continue
               </Button>
