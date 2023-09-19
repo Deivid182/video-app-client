@@ -16,7 +16,11 @@ export const useLike = () => {
         if(old == null) return []
         return old.map((video: VideoWithId) => {
           if(video._id === videoId) {
-            return { ...video, likes: [...video.likes, user._id] }
+            if(video.likes.includes(user._id)) {
+              return { ...video, likes: video.likes.filter((id: string) => id !== user._id) }
+            } else {
+              return { ...video, likes: [...video.likes, user._id] }
+            }
           }
           return video
         })
