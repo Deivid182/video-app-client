@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { axiosClient } from '@/lib/utils';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 
 const registerSchema = z.object({
   username: z
@@ -73,7 +73,7 @@ const Register = () => {
   };
 
   return (
-    <div className='max-w-md mx-auto xl:px-20 md:px-10 sm:px-2 px-4'>
+    <div className='max-w-xl mx-auto xl:px-20 md:px-10 sm:px-2 px-4'>
       <Card className='flex flex-col gap-y-6 p-4'>
         <CardHeader>
           <Heading
@@ -133,7 +133,6 @@ const Register = () => {
                       <Input
                         disabled={isLoading}
                         {...field}
-                        placeholder='johndoe@example.com'
                         type='password'
                       />
                     </FormControl>
@@ -147,6 +146,13 @@ const Register = () => {
             </form>
           </Form>
         </CardContent>
+        <CardFooter>
+          <div className='flex justify-between items-center'>
+            <Link to='/' className='text-gray-100 hover:underline'>
+              Already have an account? Login.
+            </Link>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

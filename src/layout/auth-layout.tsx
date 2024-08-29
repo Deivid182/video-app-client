@@ -10,7 +10,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { buttonVariants } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import { ModeToggle } from '@/components/mode-toggle';
 
@@ -42,18 +41,6 @@ const AuthLayout = () => {
               </div>
               <div className='flex gap-x-4 items-center max-lg:hidden'>
                 <ModeToggle />
-                <Link
-                  to={'/'}
-                  className={buttonVariants({ variant: 'ghost' })}
-                >
-                  Login
-                </Link>
-                <Link
-                  to={'/register'}
-                  className={buttonVariants({ variant: 'default', className: 'text-white' })}
-                >
-                  Sign up
-                </Link>
               </div>
               <div className='max-lg:flex items-center gap-x-6 hidden'>
                 <ModeToggle />

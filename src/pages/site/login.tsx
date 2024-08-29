@@ -17,8 +17,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Link, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email is invalid' }),
@@ -48,14 +48,11 @@ const Login = () => {
   }, [isAuth, navigate]);
 
   const onSubmit = async (values: LoginFormData) => {
-    console.log(values);
     try {
       const responseLogin = await axiosClient.post('/auth/login', values);
-      console.log(responseLogin.data);
       setToken(responseLogin.data.token);
 
       const responseProfile = await axiosClient.get('/auth/profile');
-      console.log(responseProfile);
       setProfile(responseProfile.data);
       toast.success('Success');
 
@@ -73,7 +70,7 @@ const Login = () => {
   };
 
   return (
-    <div className='max-w-md mx-auto xl:px-20 md:px-10 sm:px-2 px-4'>
+    <div className='max-w-xl mx-auto xl:px-20 md:px-10 sm:px-2 px-4'>
       <Card className='flex flex-col gap-y-6 p-4'>
         <CardHeader>
           <Heading
@@ -115,7 +112,6 @@ const Login = () => {
                       <Input
                         disabled={isLoading}
                         {...field}
-                        placeholder='johndoe@example.com'
                         type='password'
                       />
                     </FormControl>
@@ -133,6 +129,13 @@ const Login = () => {
             </form>
           </Form>
         </CardContent>
+        <CardFooter>
+          <div className='flex justify-between items-center'>
+            <Link to='/register' className='text-gray-100 hover:underline'>
+              Don't have an account? Register now.
+            </Link>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );
